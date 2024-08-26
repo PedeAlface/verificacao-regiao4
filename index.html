@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Região</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            //background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Ajusta a opacidade da camada de cor */
+            z-index: 0;
+        }
+        .container {
+            text-align: center;
+            background: rgba(0, 51, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin: 20px 0; /* Ajusta a margem para o mesmo espaçamento */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px; /* Espaçamento entre os botões */
+            margin-top: 20px; /* Ajusta o espaçamento entre a caixa de texto e os botões */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 150px; /* Define a largura dos botões */
+        }
+        .button-verify {
+            background-color: #28a745;
+            color: white;
+        }
+        .button-verify:hover {
+            background-color: #218838;
+        }
+        .button-back {
+            background-color: #dc3545;
+            color: white;
+        }
+        .button-back:hover {
+            background-color: #c82333;
+        }
+        .message {
+            margin-top: 20px;
+            color: #f8d7da;
+            background-color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin: 5px 0;">Você está a um passo de adquirir</h2>
+        <h2 style="margin: 5px 0;">o melhor da nossa seleção!</h2>
+        <p>Por favor, insira o seu CEP:</p>
+        <input type="text" id="cep" placeholder="CEP">
+        <div class="button-container">
+            <button class="button-back" onclick="voltar()">Voltar</button>
+            <button class="button-verify" onclick="verificarCEP()">Continuar</button>
+        </div>
+        <p class="message" id="message">Não atendemos na sua região.</p>
+    </div>
+
+    <script>
+        async function verificarCEP() {
+            var cep = document.getElementById("cep").value.replace("-", "");
+            var mensagem = document.getElementById("message");
+            var localidadesValidas = ["Mogi das Cruzes", "Suzano", "São Paulo"]; // Adicione mais localidades conforme necessário
+
+            if (!cep.match(/^\d{8}$/)) {
+                mensagem.textContent = "Por favor, insira um CEP válido.";
+                mensagem.style.display = "block";
+                return;
+            }
+
+            try {
+                var response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                var data = await response.json();
+
+                if (data.erro) {
+                    mensagem.textContent = "CEP não encontrado.";
+                    mensagem.style.display = "block";
+                } else if (localidadesValidas.includes(data.localidade)) {
+                    window.location.href = "https://pedealface.com/box-essencial"; // Redireciona para a Box Essencial
+                } else {
+                    mensagem.textContent = "Poxa... Ainda não atendemos sua região. Fique ligado em nossas redes sociais.";
+                    mensagem.style.display = "block";
+                }
+            } catch (error) {
+                mensagem.textContent = "Erro ao verificar o CEP. Tente novamente mais tarde.";
+                mensagem.style.display = "block";
+            }
+        }
+
+        function voltar() {
+            window.location.href = "https://pedealface.com/"; // Volta para Home page
+        }
+    </script>
+</body>
+</html>
