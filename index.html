@@ -91,7 +91,7 @@
         async function verificarCEP() {
             var cep = document.getElementById("cep").value.replace("-", "");
             var mensagem = document.getElementById("message");
-            var localidadesValidas = ["Mogi das Cruzes", "Suzano", "São Paulo"]; // Adicione mais localidades conforme necessário
+            var localidadesValidas = ["Mogi das Cruzes", "São Caetano do Sul", "Arujá", "Ferraz de Vasconcelos", "Poá", "Santo André", "Ribeirão Pires", "Mauá", "São Bernardo do Campo", "Suzano", "São Paulo"]; // Adicione mais localidades conforme necessário
 
             if (!cep.match(/^\d{8}$/)) {
                 mensagem.textContent = "Por favor, insira um CEP válido.";
